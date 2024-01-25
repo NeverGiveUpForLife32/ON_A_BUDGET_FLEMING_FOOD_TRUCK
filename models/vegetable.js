@@ -7,6 +7,7 @@ const vegetableSchema = new Schema(
     color: { type: String, required: true },
     size: { type: String, required: true },
     quantity: { Boolean, required: true },
+    isOrganic: { type: Boolean, required: true },
     user: { type: Schema.Types.ObjectIs, required: true, ref: "User" },
   },
   {
