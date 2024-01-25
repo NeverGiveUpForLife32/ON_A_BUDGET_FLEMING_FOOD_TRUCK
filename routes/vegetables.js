@@ -8,12 +8,12 @@ router.get("/", userController.auth, vegetableCtrl.indexNotComplete);
 // Index /todos/completed
 router.get("/Completed", userController.auth, vegetableCtrl.indexComplete);
 // Create /todos/:id
-router.post("/:id", userController.auth, vegetableCtrl.create);
+router.post("/:id", userController.auth, vegetableCtrl.createVegetable);
 // Update /todos/:id
-router.put("/:id", userController.auth, vegetableCtrl.update);
+router.put("/:id", userController.auth, vegetableCtrl.updateVegetable);
 // Show /todos/:id
-router.get("/:id", userController.auth, vegetableCtrl.show);
+router.get("/:id", userController.auth, vegetableCtrl.showVegetable);
 // Delete /todos/:id
-router.delete("/:id", userController.auth, vegetableCtrl.delete);
+router.delete("/:id", userController.auth, vegetableCtrl.deleteVegetable);
 
 module.exports = router;

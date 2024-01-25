@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const app = require("../app");
 const server = app.listen(8080, () => console.log("Testing on PORT 8080"));
-const User = require("../models/user");
+const Beverage = require("../models/beverage");
 let mongoServer;
 
 beforeAll(async () => {
@@ -22,17 +22,17 @@ afterAll(async () => {
 
 afterAll((done) => done());
 
-describe("Test the users endpoints", () => {
+describe("Test the beverages endpoints", () => {
   test("It should create a new user", async () => {
-    const response = await request(app).post("/users").send({
+    const response = await request(app).post("/beverages").send({
       name: "John Doe",
       email: "john.doe@example.com",
       password: "password123",
     });
 
     expect(response.statusCode).toBe(200);
-    expect(response.body.user.name).toEqual("John Doe");
-    expect(response.body.user.email).toEqual("john.doe@example.com");
+    expect(response.body.beverage.name).toEqual("John Doe");
+    expect(response.body.beverage.email).toEqual("john.doe@example.com");
     expect(response.body).toHaveProperty("token");
   });
 
@@ -54,13 +54,13 @@ describe("Test the users endpoints", () => {
     expect(response.body).toHaveProperty("token");
   });
 
-  test("It should update a user", async () => {
+  test("It should update a beverage", async () => {
     const user = new User({
       name: "John Doe",
       email: "john.doe@example.com",
       password: "password123",
     });
-    await user.save();
+    await beverage.save();
     const token = await user.generateAuthToken();
 
     const response = await request(app)
@@ -73,7 +73,7 @@ describe("Test the users endpoints", () => {
     expect(response.body.email).toEqual("jane.doe@example.com");
   });
 
-  test("It should delete a user", async () => {
+  test("It should delete a beverage", async () => {
     const user = new User({
       name: "John Doe",
       email: "john.doe@example.com",
@@ -83,10 +83,10 @@ describe("Test the users endpoints", () => {
     const token = await user.generateAuthToken();
 
     const response = await request(app)
-      .delete(`/users/${user._id}`)
+      .delete(`/beverages/${user._id}`)
       .set("Authorization", `Bearer ${token}`);
 
     expect(response.statusCode).toBe(200);
-    expect(response.body.message).toEqual("User deleted");
+    expect(response.body.message).toEqual("Beverage deleted");
   });
 });

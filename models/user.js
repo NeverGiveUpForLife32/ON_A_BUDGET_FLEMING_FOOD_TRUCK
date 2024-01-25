@@ -10,6 +10,8 @@ const userSchema = new mongoose.Schema(
     fruits: [{ type: mongoose.Schema.Types.ObjectId, ref: "Fruit" }],
     proteins: [{ type: mongoose.Schema.Types.ObjectId, ref: "Protein" }],
     vegetables: [{ type: mongoose.Schema.Types.ObjectId, ref: "Vegetable" }],
+    beverages: [{ type: mongoose.Schema.Types.ObjectId, ref: "Beverages" }],
+    deserts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Deserts" }],
   },
   {
     timestamps: true,

@@ -1,14 +1,11 @@
 const { model, Schema } = require("mongoose");
 
-const fruitSchema = new Schema(
+const beverageSchema = new Schema(
   {
     name: { type: String, required: true },
-    texture: { type: String, required: true },
-    color: { type: String, required: true },
     size: { type: String, required: true },
     quantity: { type: Boolean, required: true },
-    isOrganic: { type: Boolean, required: true },
-    isRipe: { type: Boolean, required: true },
+    isCold: { type: Boolean, required: true },
     user: { type: Schema.Types.ObjectId, required: true, ref: "User" },
   },
   {
@@ -16,6 +13,6 @@ const fruitSchema = new Schema(
   }
 );
 
-const Fruit = model("Fruit", fruitSchema);
+const Beverage = model("Beverage", beverageSchema);
 
-module.exports = Fruit;
+module.exports = Beverage;

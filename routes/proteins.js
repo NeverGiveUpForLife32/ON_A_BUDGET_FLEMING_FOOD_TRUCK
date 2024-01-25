@@ -8,12 +8,12 @@ router.get("/", userController.auth, proteinCtrl.indexNotComplete);
 // Index /todos/completed
 router.get("/Completed", userController.auth, proteinCtrl.indexComplete);
 // Create /todos/:id
-router.post("/:id", userController.auth, proteinCtrl.create);
+router.post("/:id", userController.auth, proteinCtrl.createProtein);
 // Update /todos/:id
-router.put("/:id", userController.auth, proteinCtrl.update);
+router.put("/:id", userController.auth, proteinCtrl.updateProtein);
 // Show /todos/:id
-router.get("/:id", userController.auth, proteinCtrl.show);
+router.get("/:id", userController.auth, proteinCtrl.showProtein);
 // Delete /todos/:id
-router.delete("/:id", userController.auth, proteinCtrl.delete);
+router.delete("/:id", userController.auth, proteinCtrl.deleteProtein);
 
 module.exports = router;

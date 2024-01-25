@@ -1,10 +1,10 @@
 const { model, Schema } = require("mongoose");
 
-const proteinSchema = new Schema(
+const desertSchema = new Schema(
   {
-    proteinSource: { type: String, required: true },
+    name: { type: String, required: true },
     quantity: { type: Boolean, required: true },
-    isOrganic: { type: Boolean, required: true },
+    isDelicious: { type: Boolean, required: true },
     user: { type: Schema.Types.ObjectId, required: true, ref: "User" },
   },
   {
@@ -12,6 +12,6 @@ const proteinSchema = new Schema(
   }
 );
 
-const Protein = model("Protein", proteinSchema);
+const Desert = model("Desert", desertSchema);
 
-module.exports = Protein;
+module.exports = Desert;
