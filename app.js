@@ -5,7 +5,7 @@ const fruitRoutes = require("./routes/fruits");
 const vegetableRoutes = require("./routes/vegetables");
 const proteinRoutes = require("./routes/proteins");
 const beverageRoutes = require("./routes/beverages");
-const desertRoutes = require("./routes/deserts");
+const dessertRoutes = require("./routes/desserts");
 const mealRoutes = require("./routes/meals");
 const app = express();
 
@@ -15,7 +15,7 @@ app.use("/users", userRoutes);
 app.use("/fruits", fruitRoutes);
 app.use("/vegetables", vegetableRoutes);
 app.use("/proteins", proteinRoutes);
-app.use("/deserts", desertRoutes);
+app.use("/desserts", dessertRoutes);
 app.use("/beverages", beverageRoutes);
 app.use("/meals", mealRoutes);
 

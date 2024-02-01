@@ -3,12 +3,12 @@ const router = express.Router();
 const fruitCtrl = require("../controllers/fruits");
 const userController = require("../controllers/users");
 
-// Index /todos/notCompleted
-router.get("/", userController.auth, fruitCtrl.indexNotComplete);
-// Index /todos/completed
-router.get("/Completed", userController.auth, fruitCtrl.indexComplete);
+// Index /todos/notRipe
+router.get("/notripe", userController.auth, fruitCtrl.indexNotRipe);
+// Index /todos/ripe
+router.get("/ripe", userController.auth, fruitCtrl.indexRipe);
 // Create /todos/:id
-router.post("/:id", userController.auth, fruitCtrl.createFruit);
+router.post("/", userController.auth, fruitCtrl.createFruit);
 // Update /todos/:id
 router.put("/:id", userController.auth, fruitCtrl.updateFruit);
 // Show /todos/:id

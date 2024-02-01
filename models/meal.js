@@ -2,14 +2,18 @@ const { model, Schema } = require("mongoose");
 
 const mealSchema = new Schema(
   {
-    fruit: { type: String, required: true },
-    vegetable: { type: String, required: true },
-    proteinSource: { type: String, required: true },
-    beverage: { type: String, required: true },
-    desert: { type: Boolean, required: true },
-    isReadytoEat: { type: Boolean, required: true },
-    quantity: { type: String, required: true },
-    user: { type: Schema.Types.ObjectId, required: true, ref: "User" },
+    specialRequests: { type: String, required: true },
+    isReadyToEat: { type: Boolean, required: true },
+    quantity: { type: Number, required: true },
+    fruit: { type: Schema.Types.ObjectId, ref: "Fruit" },
+    vegetable: {
+      type: Schema.Types.ObjectId,
+      ref: "Vegetable",
+    },
+    protein: { type: Schema.Types.ObjectId, ref: "Protein" },
+    dessert: { type: Schema.Types.ObjectId, ref: "Dessert" },
+    beverage: { type: Schema.Types.ObjectId, ref: "Beverage" },
+    user: { type: Schema.Types.ObjectId, ref: "User" },
   },
   {
     timestamps: true,

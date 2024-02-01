@@ -3,12 +3,12 @@ const router = express.Router();
 const vegetableCtrl = require("../controllers/vegetables");
 const userController = require("../controllers/users");
 
-// Index /todos/notCompleted
-router.get("/", userController.auth, vegetableCtrl.indexNotComplete);
-// Index /todos/completed
-router.get("/Completed", userController.auth, vegetableCtrl.indexComplete);
+// Index /todos/notOrganic
+router.get("/notorganic", userController.auth, vegetableCtrl.indexNotOrganic);
+// Index /todos/organic
+router.get("/organic", userController.auth, vegetableCtrl.indexOrganic);
 // Create /todos/:id
-router.post("/:id", userController.auth, vegetableCtrl.createVegetable);
+router.post("/", userController.auth, vegetableCtrl.createVegetable);
 // Update /todos/:id
 router.put("/:id", userController.auth, vegetableCtrl.updateVegetable);
 // Show /todos/:id

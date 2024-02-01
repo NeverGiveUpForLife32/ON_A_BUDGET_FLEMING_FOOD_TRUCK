@@ -1,25 +1,33 @@
 const Meal = require("../models/meal");
 const User = require("../models/user");
+const Fruit = require("../models/fruit");
+const Vegetable = require("../models/vegetable");
+const Protein = require("../models/protein");
+const Desert = require("../models/dessert");
+const Beverage = require("../models/beverage");
 
-exports.indexNotComplete = async function (req, res) {
+exports.indexNotReadyToEat = async function (req, res) {
   try {
-    const meal = await Meal.find({ isReadyToEat: false, user: req.user._id });
-    res.json(meal);
+    const menu = await Meal.find({
+      isReadyToEat: false,
+    });
+
+    res.status(200).json(menu);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
 
-exports.indexComplete = async function (req, res) {
+exports.indexReadyToEat = async function (req, res) {
   try {
     const meal = await Meal.find({ isReadyToEat: true, user: req.user._id });
-    res.json(meal);
+    res.status(200).json(meal);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
 
-exports.createMenu = async function (req, res) {
+exports.createMeal = async function (req, res) {
   try {
     req.body.user = req.user._id;
     const meal = await Meal.create(req.body);
@@ -27,36 +35,35 @@ exports.createMenu = async function (req, res) {
       ? req.user.meals.addToSet({ _id: meal._id })
       : (req.user.meals = [{ _id: meal._id }]);
     await req.user.save();
-    res.json(meal);
+    res.status(200).json(meal);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
 
-exports.updateMenu = async function (req, res) {
+exports.updateMeal = async function (req, res) {
   try {
     const meal = await Meal.findOneAndUpdate({ _id: req.params.id }, req.body, {
       new: true,
     });
-    res.json(meal);
+    res.status(200).json(meal);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
 
-exports.showMenu = async function (req, res) {
+exports.showMeal = async function (req, res) {
   try {
     const meal = await Meal.findOne({ _id: req.params.id });
-    res.json(meal);
+    res.status(200).json(meal);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
 };
 
-exports.deleteMenu = async function (req, res) {
+exports.deleteMeal = async function (req, res) {
   try {
     const meal = await Meal.findOneAndDelete({ _id: req.params.id });
-    res.json(meal);
     res.sendStatus(204);
   } catch (error) {
     res.status(400).json({ messsage: error.message });

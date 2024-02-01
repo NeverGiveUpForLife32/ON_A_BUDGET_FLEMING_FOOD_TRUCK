@@ -3,8 +3,8 @@ const { model, Schema } = require("mongoose");
 const vegetableSchema = new Schema(
   {
     name: { type: String, required: true },
-    color: { type: String, required: true },
-    quantity: { type: Boolean, required: true },
+    dippingSauce: { type: String, required: true },
+    quantity: { type: Number, required: true },
     isOrganic: { type: Boolean, required: true },
     user: { type: Schema.Types.ObjectId, required: true, ref: "User" },
   },

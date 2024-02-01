@@ -1,92 +1,252 @@
-const request = require("supertest");
+/*
+router.get('/', todoCtrl.index) // x i need to test and see that I can make a request to this route and get back a list of valid todos, or an emtyp array if its empty
+router.post('/', todoCtrl.create) // x i need to ensure that I can create a todo
+router.put('/:id', todoCtrl.update) // x i need to ensure that given a valid id and a valid body that I can chanfge an existing todo
+router.delete('/:id', todoCtrl.detroy) // x i need to ensure that given a valid id I can destroy an existing todo
+router.get('/:id', todoCtrl.show) // x I need to ensure that gicen a vcalid id that I can see an existing todo
+*/
+
 const mongoose = require("mongoose");
-const { MongoMemoryServer } = require("mongodb-memory-server");
 const app = require("../app");
-const server = app.listen(8080, () => console.log("Testing on PORT 8080"));
-const User = require("../models/user");
+const { MongoMemoryServer } = require("mongodb-memory-server");
+const request = require("supertest");
+const server = app.listen(3016, () => console.log("lets test"));
 let mongoServer;
+const Fruit = require("../models/fruit");
+const User = require("../models/user");
 
 beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create();
-  await mongoose.connect(mongoServer.getUri(), {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  await mongoose.connect(mongoServer.getUri());
 });
 
 afterAll(async () => {
-  await mongoose.connection.close();
-  mongoServer.stop();
-  server.close();
+  await mongoose.connection.close(); //connection between mongoose and server will close here after test is ran.
+  mongoServer.stop(); //mongoServer will stop as well
+  server.close(); //The server on 3011 will stop running
 });
 
-afterAll((done) => done());
-
-describe("Test the users endpoints", () => {
-  test("It should create a new user", async () => {
-    const response = await request(app).post("/users").send({
-      name: "John Doe",
-      email: "john.doe@example.com",
-      password: "password123",
-    });
-
-    expect(response.statusCode).toBe(200);
-    expect(response.body.user.name).toEqual("John Doe");
-    expect(response.body.user.email).toEqual("john.doe@example.com");
-    expect(response.body).toHaveProperty("token");
-  });
-
-  test("It should login a user", async () => {
+describe("Testing Fruit Endpoints For RESTFUL JSON API", () => {
+  test("It should Index a list of riped fruits", async () => {
     const user = new User({
-      name: "John Doe",
-      email: "john.doe@example.com",
-      password: "password123",
+      name: "Chris",
+      email: "clflem687@yahoo.com",
+      password: "687",
     });
     await user.save();
 
-    const response = await request(app)
-      .post("/users/login")
-      .send({ email: "john.doe@example.com", password: "password123" });
-
-    expect(response.statusCode).toBe(200);
-    expect(response.body.user.name).toEqual("John Doe");
-    expect(response.body.user.email).toEqual("john.doe@example.com");
-    expect(response.body).toHaveProperty("token");
-  });
-
-  test("It should update a user", async () => {
-    const user = new User({
-      name: "John Doe",
-      email: "john.doe@example.com",
-      password: "password123",
+    const fruit = new Fruit({
+      name: "test fruit name",
+      texture: "test fruit texture",
+      color: "test fruit color",
+      size: "test fruit texture",
+      quantity: 1,
+      isOrganic: true,
+      isRipe: true,
+      user: user._id,
     });
-    await user.save();
+    await fruit.save(); //Before the database has finished resolving, it has to finish saving the document
+
     const token = await user.generateAuthToken();
 
     const response = await request(app)
-      .put(`/users/${user._id}`)
-      .set("Authorization", `Bearer ${token}`)
-      .send({ name: "Jane Doe", email: "jane.doe@example.com" });
+      .get("/fruits/ripe")
+      .set("Authorization", `Bearer ${token}`); //make a request using supertest. Before this finishes resolving, it needs to make a request to /fruits.
 
     expect(response.statusCode).toBe(200);
-    expect(response.body.name).toEqual("Jane Doe");
-    expect(response.body.email).toEqual("jane.doe@example.com");
+    expect(Array.isArray(response.body)).toBeTruthy();
+
+    for (let i = 0; i < response.body.length; i++) {
+      expect(response.body[i]).toHaveProperty("name");
+      expect(response.body[i]).toHaveProperty("texture");
+      expect(response.body[i]).toHaveProperty("color");
+      expect(response.body[i]).toHaveProperty("size");
+      expect(response.body[i]).toHaveProperty("quantity");
+      expect(response.body[i]).toHaveProperty("isOrganic");
+      expect(response.body[i]).toHaveProperty("isRipe");
+    }
   });
 
-  test("It should delete a user", async () => {
+  test("It should Index a list of unriped fruits", async () => {
     const user = new User({
-      name: "John Doe",
-      email: "john.doe@example.com",
-      password: "password123",
+      name: "Chris",
+      email: "clflem6877@yahoo.com",
+      password: "687",
     });
     await user.save();
+
+    const fruit = new Fruit({
+      name: "test fruit name",
+      texture: "test fruit texture",
+      color: "test fruit color",
+      size: "test fruit texture",
+      quantity: 1,
+      isOrganic: true,
+      isRipe: false,
+      user: user._id,
+    });
+    await fruit.save(); //Before the database has finished resolving, it has to finish saving the document
+
     const token = await user.generateAuthToken();
 
     const response = await request(app)
-      .delete(`/users/${user._id}`)
+      .get("/fruits/notripe")
+      .set("Authorization", `Bearer ${token}`); //make a request using supertest. Before this finishes resolving, it needs to make a request to /fruits.
+
+    expect(response.statusCode).toBe(200);
+    expect(Array.isArray(response.body)).toBeTruthy();
+
+    for (let i = 0; i < response.body.length; i++) {
+      expect(response.body[i]).toHaveProperty("name");
+      expect(response.body[i]).toHaveProperty("texture");
+      expect(response.body[i]).toHaveProperty("color");
+      expect(response.body[i]).toHaveProperty("size");
+      expect(response.body[i]).toHaveProperty("quantity");
+      expect(response.body[i]).toHaveProperty("isOrganic");
+      expect(response.body[i]).toHaveProperty("isRipe");
+    }
+  });
+
+  test("It should Create a list of fruits", async () => {
+    const user = new User({
+      name: "Christ",
+      email: "clflem6871@yahoo.com",
+      password: "6871",
+    });
+    await user.save();
+
+    const token = await user.generateAuthToken();
+
+    const response = await request(app)
+      .post("/fruits")
+      .send({
+        name: "Apple",
+        texture: "Hard",
+        color: "Red",
+        size: "Large",
+        quantity: 1,
+        isOrganic: true,
+        isRipe: true,
+      })
+      .set("Authorization", `Bearer ${token}`); //make a request using supertest. Before this finishes resolving, it needs to make a request to /fruits.
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.name).toEqual("Apple");
+    expect(response.body.texture).toEqual("Hard");
+    expect(response.body.color).toEqual("Red");
+    expect(response.body.size).toEqual("Large");
+    expect(response.body.quantity).toEqual(1);
+    expect(response.body.isOrganic).toEqual(true);
+    expect(response.body.isRipe).toEqual(true);
+  });
+
+  test("It should Update an individual fruit", async () => {
+    const user = new User({
+      name: "Christo",
+      email: "clflem6872@yahoo.com",
+      password: "6872",
+    });
+    await user.save();
+
+    const token = await user.generateAuthToken();
+
+    const fruit = new Fruit({
+      name: "Apple",
+      texture: "Hard",
+      color: "Green",
+      size: "Large",
+      quantity: 1,
+      isOrganic: true,
+      isRipe: true,
+      user: user._id,
+    });
+    await fruit.save();
+
+    const response = await request(app)
+      .put(`/fruits/${fruit._id}`)
+      .send({
+        name: "Banana",
+        texture: "Soft",
+        color: "Yellow",
+        size: "Medium",
+        quantity: 3,
+        isOrganic: true,
+        isRipe: true,
+      })
+      .set("Authorization", `Bearer ${token}`); //Before the database has finished resolving, it has to finish saving the document
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.name).toEqual("Banana");
+    expect(response.body.texture).toEqual("Soft");
+    expect(response.body.color).toEqual("Yellow");
+    expect(response.body.size).toEqual("Medium");
+    expect(response.body.quantity).toEqual(3);
+    expect(response.body.isOrganic).toEqual(true);
+    expect(response.body.isRipe).toEqual(true);
+  });
+
+  test("It should Show an individual fruit", async () => {
+    const user = new User({
+      name: "Christop",
+      email: "clflem6873@yahoo.com",
+      password: "6873",
+    });
+    await user.save();
+
+    const token = await user.generateAuthToken();
+
+    const fruit = new Fruit({
+      name: "Pear",
+      texture: "Hard",
+      color: "Green",
+      size: "Large",
+      quantity: 4,
+      isOrganic: true,
+      isRipe: true,
+      user: user._id,
+    });
+    await fruit.save();
+
+    const response = await request(app)
+      .get(`/fruits/${fruit._id}`)
       .set("Authorization", `Bearer ${token}`);
 
     expect(response.statusCode).toBe(200);
-    expect(response.body.message).toEqual("User deleted");
+    expect(response.body.name).toEqual("Pear");
+    expect(response.body.texture).toEqual("Hard");
+    expect(response.body.color).toEqual("Green");
+    expect(response.body.size).toEqual("Large");
+    expect(response.body.quantity).toEqual(4);
+    expect(response.body.isOrganic).toEqual(true);
+    expect(response.body.isRipe).toEqual(true);
+  });
+
+  test("It should Delete an individual fruit", async () => {
+    const user = new User({
+      name: "Christoph",
+      email: "clflem6874@yahoo.com",
+      password: "6874",
+    });
+    await user.save();
+
+    const token = await user.generateAuthToken();
+
+    const fruit = new Fruit({
+      name: "Cantaloupe",
+      texture: "Soft",
+      color: "Orange",
+      size: "Medium",
+      quantity: 1,
+      isOrganic: true,
+      isRipe: true,
+      user: user._id,
+    });
+    await fruit.save();
+
+    const response = await request(app)
+      .delete(`/fruits/${fruit._id}`)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.statusCode).toBe(204);
   });
 });

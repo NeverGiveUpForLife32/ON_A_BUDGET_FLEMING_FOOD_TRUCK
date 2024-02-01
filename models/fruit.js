@@ -6,7 +6,7 @@ const fruitSchema = new Schema(
     texture: { type: String, required: true },
     color: { type: String, required: true },
     size: { type: String, required: true },
-    quantity: { type: Boolean, required: true },
+    quantity: { type: Number, required: true },
     isOrganic: { type: Boolean, required: true },
     isRipe: { type: Boolean, required: true },
     user: { type: Schema.Types.ObjectId, required: true, ref: "User" },

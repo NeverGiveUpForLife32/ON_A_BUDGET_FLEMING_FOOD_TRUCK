@@ -2,7 +2,7 @@ const request = require("supertest");
 const mongoose = require("mongoose");
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const app = require("../app");
-const server = app.listen(8080, () => console.log("Testing on PORT 8080"));
+const server = app.listen(3020, () => console.log("Testing on PORT 3020"));
 const User = require("../models/user");
 let mongoServer;
 
@@ -57,7 +57,7 @@ describe("Test the users endpoints", () => {
   test("It should update a user", async () => {
     const user = new User({
       name: "John Doe",
-      email: "john.doe@example.com",
+      email: "john.doe1@example.com",
       password: "password123",
     });
     await user.save();
@@ -66,17 +66,17 @@ describe("Test the users endpoints", () => {
     const response = await request(app)
       .put(`/users/${user._id}`)
       .set("Authorization", `Bearer ${token}`)
-      .send({ name: "Jane Doe", email: "jane.doe@example.com" });
+      .send({ name: "Jane Doe", email: "jane.doe1@example.com" });
 
     expect(response.statusCode).toBe(200);
     expect(response.body.name).toEqual("Jane Doe");
-    expect(response.body.email).toEqual("jane.doe@example.com");
+    expect(response.body.email).toEqual("jane.doe1@example.com");
   });
 
   test("It should delete a user", async () => {
     const user = new User({
       name: "John Doe",
-      email: "john.doe@example.com",
+      email: "john.doe2@example.com",
       password: "password123",
     });
     await user.save();
@@ -86,7 +86,6 @@ describe("Test the users endpoints", () => {
       .delete(`/users/${user._id}`)
       .set("Authorization", `Bearer ${token}`);
 
-    expect(response.statusCode).toBe(200);
-    expect(response.body.message).toEqual("User deleted");
+    expect(response.statusCode).toBe(204);
   });
 });

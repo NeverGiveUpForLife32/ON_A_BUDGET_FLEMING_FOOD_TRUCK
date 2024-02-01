@@ -1,92 +1,216 @@
-const request = require("supertest");
+/*
+router.get('/', todoCtrl.index) // x i need to test and see that I can make a request to this route and get back a list of valid todos, or an emtyp array if its empty
+router.post('/', todoCtrl.create) // x i need to ensure that I can create a todo
+router.put('/:id', todoCtrl.update) // x i need to ensure that given a valid id and a valid body that I can chanfge an existing todo
+router.delete('/:id', todoCtrl.detroy) // x i need to ensure that given a valid id I can destroy an existing todo
+router.get('/:id', todoCtrl.show) // x I need to ensure that gicen a vcalid id that I can see an existing todo
+*/
+
 const mongoose = require("mongoose");
-const { MongoMemoryServer } = require("mongodb-memory-server");
 const app = require("../app");
-const server = app.listen(8080, () => console.log("Testing on PORT 8080"));
-const Beverage = require("../models/beverage");
+const { MongoMemoryServer } = require("mongodb-memory-server");
+const request = require("supertest");
+const server = app.listen(3011, () => console.log("lets test"));
 let mongoServer;
+const Beverage = require("../models/beverage");
+const User = require("../models/user");
 
 beforeAll(async () => {
   mongoServer = await MongoMemoryServer.create();
-  await mongoose.connect(mongoServer.getUri(), {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  await mongoose.connect(mongoServer.getUri());
 });
 
 afterAll(async () => {
-  await mongoose.connection.close();
-  mongoServer.stop();
-  server.close();
+  await mongoose.connection.close(); //connection between mongoose and server will close here after test is ran.
+  mongoServer.stop(); //mongoServer will stop as well
+  server.close(); //The server on 3011 will stop running
 });
 
-afterAll((done) => done());
-
-describe("Test the beverages endpoints", () => {
-  test("It should create a new user", async () => {
-    const response = await request(app).post("/beverages").send({
-      name: "John Doe",
-      email: "john.doe@example.com",
-      password: "password123",
-    });
-
-    expect(response.statusCode).toBe(200);
-    expect(response.body.beverage.name).toEqual("John Doe");
-    expect(response.body.beverage.email).toEqual("john.doe@example.com");
-    expect(response.body).toHaveProperty("token");
-  });
-
-  test("It should login a user", async () => {
+describe("Testing Beverage Endpoints For RESTFUL JSON API", () => {
+  test("It should Index a list of cold beverages", async () => {
     const user = new User({
-      name: "John Doe",
-      email: "john.doe@example.com",
-      password: "password123",
+      name: "Chris",
+      email: "clflem6870@yahoo.com",
+      password: "687",
     });
     await user.save();
 
+    const beverage = new Beverage({
+      name: "test beverage name",
+      size: "test beverage texture",
+      quantity: 1,
+      isCold: true,
+      user: user._id,
+    });
+    await beverage.save(); //Before the database has finished resolving, it has to finish saving the document
+
+    const token = await user.generateAuthToken();
+
     const response = await request(app)
-      .post("/users/login")
-      .send({ email: "john.doe@example.com", password: "password123" });
+      .get("/beverages/cold")
+      .set("Authorization", `Bearer ${token}`); //make a request using supertest. Before this finishes resolving, it needs to make a request to /fruits.
 
     expect(response.statusCode).toBe(200);
-    expect(response.body.user.name).toEqual("John Doe");
-    expect(response.body.user.email).toEqual("john.doe@example.com");
-    expect(response.body).toHaveProperty("token");
+    expect(Array.isArray(response.body)).toBeTruthy();
+
+    for (let i = 0; i < response.body.length; i++) {
+      expect(response.body[i]).toHaveProperty("name");
+      expect(response.body[i]).toHaveProperty("size");
+      expect(response.body[i]).toHaveProperty("quantity");
+      expect(response.body[i]).toHaveProperty("isCold");
+    }
   });
 
-  test("It should update a beverage", async () => {
+  test("It should Index a list of not cold beverages", async () => {
     const user = new User({
-      name: "John Doe",
-      email: "john.doe@example.com",
-      password: "password123",
+      name: "Chris",
+      email: "clflem68770@yahoo.com",
+      password: "687",
+    });
+    await user.save();
+
+    const beverage = new Beverage({
+      name: "test beverage name",
+      size: "test beverage texture",
+      quantity: 1,
+      isCold: true,
+      user: user._id,
+    });
+    await beverage.save(); //Before the database has finished resolving, it has to finish saving the document
+
+    const token = await user.generateAuthToken();
+
+    const response = await request(app)
+      .get("/beverages/notcold")
+      .set("Authorization", `Bearer ${token}`); //make a request using supertest. Before this finishes resolving, it needs to make a request to /fruits.
+
+    expect(response.statusCode).toBe(200);
+    expect(Array.isArray(response.body)).toBeTruthy();
+
+    for (let i = 0; i < response.body.length; i++) {
+      expect(response.body[i]).toHaveProperty("name");
+      expect(response.body[i]).toHaveProperty("size");
+      expect(response.body[i]).toHaveProperty("quantity");
+      expect(response.body[i]).toHaveProperty("isCold");
+    }
+  });
+
+  test("It should Create a list of beverages", async () => {
+    const user = new User({
+      name: "Christ",
+      email: "clflem68712@yahoo.com",
+      password: "6871",
+    });
+    await user.save();
+
+    const token = await user.generateAuthToken();
+
+    const response = await request(app)
+      .post("/beverages")
+      .send({
+        name: "Apple Juice",
+        size: "Large",
+        quantity: 1,
+        isCold: true,
+      })
+      .set("Authorization", `Bearer ${token}`); //make a request using supertest. Before this finishes resolving, it needs to make a request to /fruits.
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body.name).toEqual("Apple Juice");
+    expect(response.body.size).toEqual("Large");
+    expect(response.body.quantity).toEqual(1);
+    expect(response.body.isCold).toEqual(true);
+  });
+
+  test("It should Update an individual beverage", async () => {
+    const user = new User({
+      name: "Christo",
+      email: "clflem68723@yahoo.com",
+      password: "6872",
+    });
+    await user.save();
+
+    const token = await user.generateAuthToken();
+
+    const beverage = new Beverage({
+      name: "Orange Juice",
+      size: "Medium",
+      quantity: 1,
+      isCold: true,
+      user: user._id,
     });
     await beverage.save();
-    const token = await user.generateAuthToken();
 
     const response = await request(app)
-      .put(`/users/${user._id}`)
-      .set("Authorization", `Bearer ${token}`)
-      .send({ name: "Jane Doe", email: "jane.doe@example.com" });
+      .put(`/beverages/${beverage._id}`)
+      .send({
+        name: "Banana Juice",
+        size: "Medium",
+        quantity: 3,
+        isCold: true,
+      })
+      .set("Authorization", `Bearer ${token}`); //Before the database has finished resolving, it has to finish saving the document
 
     expect(response.statusCode).toBe(200);
-    expect(response.body.name).toEqual("Jane Doe");
-    expect(response.body.email).toEqual("jane.doe@example.com");
+    expect(response.body.name).toEqual("Banana Juice");
+    expect(response.body.size).toEqual("Medium");
+    expect(response.body.quantity).toEqual(3);
+    expect(response.body.isCold).toEqual(true);
   });
 
-  test("It should delete a beverage", async () => {
+  test("It should Show an individual beverage", async () => {
     const user = new User({
-      name: "John Doe",
-      email: "john.doe@example.com",
-      password: "password123",
+      name: "Christop",
+      email: "clflem68734@yahoo.com",
+      password: "6873",
     });
     await user.save();
+
     const token = await user.generateAuthToken();
 
+    const beverage = new Beverage({
+      name: "Grape Juice",
+      size: "Large",
+      quantity: 1,
+      isCold: true,
+      user: user._id,
+    });
+    await beverage.save();
+
     const response = await request(app)
-      .delete(`/beverages/${user._id}`)
+      .get(`/beverages/${beverage._id}`)
       .set("Authorization", `Bearer ${token}`);
 
     expect(response.statusCode).toBe(200);
-    expect(response.body.message).toEqual("Beverage deleted");
+    expect(response.body.name).toEqual("Grape Juice");
+    expect(response.body.size).toEqual("Large");
+    expect(response.body.quantity).toEqual(1);
+    expect(response.body.isCold).toEqual(true);
+  });
+
+  test("It should Delete an individual beverage", async () => {
+    const user = new User({
+      name: "Christoph",
+      email: "clflem68745@yahoo.com",
+      password: "6874",
+    });
+    await user.save();
+
+    const token = await user.generateAuthToken();
+
+    const beverage = new Beverage({
+      name: "Coconut Milk",
+      size: "Small",
+      quantity: 1,
+      isCold: true,
+      user: user._id,
+    });
+    await beverage.save();
+
+    const response = await request(app)
+      .delete(`/beverages/${beverage._id}`)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(response.statusCode).toBe(204);
   });
 });

@@ -3,12 +3,12 @@ const router = express.Router();
 const beverageCtrl = require("../controllers/beverages");
 const userController = require("../controllers/users");
 
-// Index /todos/notCompleted
-router.get("/", userController.auth, beverageCtrl.indexNotComplete);
-// Index /todos/completed
-router.get("/Completed", userController.auth, beverageCtrl.indexComplete);
+// Index /todos/notCold
+router.get("/notcold", userController.auth, beverageCtrl.indexNotCold);
+// Index /todos/cold
+router.get("/cold", userController.auth, beverageCtrl.indexCold);
 // Create /todos/:id
-router.post("/:id", userController.auth, beverageCtrl.createBeverage);
+router.post("/", userController.auth, beverageCtrl.createBeverage);
 // Update /todos/:id
 router.put("/:id", userController.auth, beverageCtrl.updateBeverage);
 // Show /todos/:id

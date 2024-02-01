@@ -5,13 +5,14 @@ const jwt = require("jsonwebtoken");
 
 const userSchema = new mongoose.Schema(
   {
+    name: { type: String, required: true },
     email: { type: String, required: true },
     password: { type: String, required: true },
     fruits: [{ type: mongoose.Schema.Types.ObjectId, ref: "Fruit" }],
     proteins: [{ type: mongoose.Schema.Types.ObjectId, ref: "Protein" }],
     vegetables: [{ type: mongoose.Schema.Types.ObjectId, ref: "Vegetable" }],
-    beverages: [{ type: mongoose.Schema.Types.ObjectId, ref: "Beverages" }],
-    deserts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Deserts" }],
+    beverages: [{ type: mongoose.Schema.Types.ObjectId, ref: "Beverage" }],
+    desserts: [{ type: mongoose.Schema.Types.ObjectId, ref: "Dessert" }],
   },
   {
     timestamps: true,
@@ -19,7 +20,7 @@ const userSchema = new mongoose.Schema(
 );
 
 userSchema.pre("save", async function (next) {
-  this.isModifies("password")
+  this.isModified("password")
     ? (this.password = await bcrypt.hash(this.password, 8))
     : null;
   next();

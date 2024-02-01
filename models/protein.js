@@ -2,8 +2,9 @@ const { model, Schema } = require("mongoose");
 
 const proteinSchema = new Schema(
   {
-    proteinSource: { type: String, required: true },
-    quantity: { type: Boolean, required: true },
+    proteinSourceName: { type: String, required: true },
+    specialRequests: { type: String, required: true },
+    quantity: { type: Number, required: true },
     isOrganic: { type: Boolean, required: true },
     user: { type: Schema.Types.ObjectId, required: true, ref: "User" },
   },

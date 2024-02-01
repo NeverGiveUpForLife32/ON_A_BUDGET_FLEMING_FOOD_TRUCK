@@ -3,17 +3,17 @@ const router = express.Router();
 const mealCtrl = require("../controllers/meals");
 const userController = require("../controllers/users");
 
-// Index /todos/notCompleted
-router.get("/", userController.auth, mealCtrl.indexNotComplete);
+// Index /todos/notReadyToEat
+router.get("/notreadytoeat", userController.auth, mealCtrl.indexNotReadyToEat);
 // Index /todos/completed
-router.get("/Completed", userController.auth, mealCtrl.indexComplete);
+router.get("/readytoeat", userController.auth, mealCtrl.indexReadyToEat);
 // Create /todos/:id
-router.post("/:id", userController.auth, mealCtrl.createMenu);
+router.post("/", userController.auth, mealCtrl.createMeal);
 // Update /todos/:id
-router.put("/:id", userController.auth, mealCtrl.updateMenu);
+router.put("/:id", userController.auth, mealCtrl.updateMeal);
 // Show /todos/:id
-router.get("/:id", userController.auth, mealCtrl.showMenu);
+router.get("/:id", userController.auth, mealCtrl.showMeal);
 // Delete /todos/:id
-router.delete("/:id", userController.auth, mealCtrl.deleteMenu);
+router.delete("/:id", userController.auth, mealCtrl.deleteMeal);
 
 module.exports = router;
