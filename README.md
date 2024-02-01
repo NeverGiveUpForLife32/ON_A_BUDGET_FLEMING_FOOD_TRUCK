@@ -1,3 +1,11 @@
-# Rizzle and Sizzle Flamin Fleming Restaurant
+# Rizzle and Sizzle Flamin' Fleming Restaurant
 
-### This online restaurant application is focused on providing a platform for specific meal requests. In addition, you'll be able to create a user-friendly and personalized experience, designed to meet the needs of hungry customers and to provide accept and respond with specific requests of meal requests.
+### This online restaurant application is dedicated to offering a specialized platform for individualized meal requests. It is crafted to deliver a seamless and personalized dining experience, tailored to satisfy the cravings of our customers while promptly acknowledging and fulfilling their specific meal preferences.
+
+## Installing
+
+### 1. Start by cloning the git repository:
+
+```
+git clone git@github.com:NeverGiveUpForLife32/RIZZLE_AND_SIZZLE_FLAMIN_FLEMING_RESTAURANT.git
+```
