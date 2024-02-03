@@ -4,6 +4,7 @@ const mealSchema = new Schema(
   {
     specialRequests: { type: String, required: true },
     isReadyToEat: { type: Boolean, required: true },
+    is$20Each: { type: Boolean, required: true },
     quantity: { type: Number, required: true },
     fruit: { type: Schema.Types.ObjectId, ref: "Fruit" },
     vegetable: {

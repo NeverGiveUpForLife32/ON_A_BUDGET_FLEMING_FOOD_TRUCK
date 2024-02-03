@@ -44,9 +44,6 @@ describe("Testing Meal Endpoints For RESTFUL JSON API", () => {
 
     const fruit = new Fruit({
       name: "Apple",
-      texture: "Hard",
-      color: "Red",
-      size: "Medium",
       quantity: 1,
       isOrganic: true,
       isRipe: true,
@@ -83,9 +80,9 @@ describe("Testing Meal Endpoints For RESTFUL JSON API", () => {
 
     const beverage = new Beverage({
       name: "Beer",
-      size: "Extra Large",
       quantity: 1,
       isCold: true,
+      isLargeCup: true,
       user: user._id,
     });
     await beverage.save();
@@ -93,6 +90,7 @@ describe("Testing Meal Endpoints For RESTFUL JSON API", () => {
     const meal = new Meal({
       specialRequests: "Add Plates and Napkins",
       isReadyToEat: true,
+      is$20Each: true,
       quantity: 1,
       fruit: fruit._id,
       vegetable: vegetable._id,
@@ -111,13 +109,15 @@ describe("Testing Meal Endpoints For RESTFUL JSON API", () => {
     expect(Array.isArray(response.body)).toBeTruthy();
 
     for (let i = 0; i < response.body.length; i++) {
+      expect(response.body[i]).toHaveProperty("specialRequests");
+      expect(response.body[i]).toHaveProperty("isReadyToEat");
+      expect(response.body[i]).toHaveProperty("is$20Each");
+      expect(response.body[i]).toHaveProperty("quantity");
       expect(response.body[i]).toHaveProperty("fruit");
       expect(response.body[i]).toHaveProperty("vegetable");
       expect(response.body[i]).toHaveProperty("protein");
       expect(response.body[i]).toHaveProperty("dessert");
       expect(response.body[i]).toHaveProperty("beverage");
-      expect(response.body[i]).toHaveProperty("quantity");
-      expect(response.body[i]).toHaveProperty("isReadyToEat");
     }
   });
 
@@ -133,9 +133,6 @@ describe("Testing Meal Endpoints For RESTFUL JSON API", () => {
 
     const fruit = new Fruit({
       name: "Apple",
-      texture: "Hard",
-      color: "Green",
-      size: "Large",
       quantity: 2,
       isOrganic: false,
       isRipe: false,
@@ -171,10 +168,10 @@ describe("Testing Meal Endpoints For RESTFUL JSON API", () => {
     await dessert.save();
 
     const beverage = new Beverage({
-      name: "Sunkist Grape",
-      size: "Large",
+      name: "Grape Sunkist",
       quantity: 1,
-      isCold: false,
+      isCold: true,
+      isLargeCup: true,
       user: user._id,
     });
     await beverage.save();
@@ -182,6 +179,7 @@ describe("Testing Meal Endpoints For RESTFUL JSON API", () => {
     const meal = new Meal({
       specialRequests: "Add Utensils",
       isReadyToEat: false,
+      is$20Each: true,
       quantity: 1,
       fruit: fruit._id,
       vegetable: vegetable._id,
@@ -200,13 +198,15 @@ describe("Testing Meal Endpoints For RESTFUL JSON API", () => {
     expect(Array.isArray(response.body)).toBeTruthy();
 
     for (let i = 0; i < response.body.length; i++) {
+      expect(response.body[i]).toHaveProperty("specialRequests");
+      expect(response.body[i]).toHaveProperty("isReadyToEat");
+      expect(response.body[i]).toHaveProperty("is$20Each");
+      expect(response.body[i]).toHaveProperty("quantity");
       expect(response.body[i]).toHaveProperty("fruit");
       expect(response.body[i]).toHaveProperty("vegetable");
       expect(response.body[i]).toHaveProperty("protein");
       expect(response.body[i]).toHaveProperty("dessert");
       expect(response.body[i]).toHaveProperty("beverage");
-      expect(response.body[i]).toHaveProperty("quantity");
-      expect(response.body[i]).toHaveProperty("isReadyToEat");
     }
   });
 
@@ -222,9 +222,6 @@ describe("Testing Meal Endpoints For RESTFUL JSON API", () => {
 
     const fruit = new Fruit({
       name: "Watermelon",
-      texture: "N/A",
-      color: "Green",
-      size: "Large",
       quantity: 1,
       isOrganic: true,
       isRipe: true,
@@ -260,10 +257,10 @@ describe("Testing Meal Endpoints For RESTFUL JSON API", () => {
     await dessert.save();
 
     const beverage = new Beverage({
-      name: "Sunkist Grape",
-      size: "Large",
+      name: "Orange Sunkist",
       quantity: 1,
       isCold: true,
+      isLargeCup: true,
       user: user._id,
     });
     await beverage.save();
@@ -271,26 +268,28 @@ describe("Testing Meal Endpoints For RESTFUL JSON API", () => {
     const response = await request(app)
       .post("/meals")
       .send({
+        specialRequests: "None",
+        isReadyToEat: true,
+        is$20Each: true,
+        quantity: 1,
         fruit: fruit._id,
         vegetable: vegetable._id,
         protein: protein._id,
         dessert: dessert._id,
         beverage: beverage._id,
-        specialRequests: "None",
-        quantity: 1,
-        isReadyToEat: true,
       })
       .set("Authorization", `Bearer ${token}`); //make a request using supertest. Before this finishes resolving, it needs to make a request to /fruits.
 
+    expect(response.body.specialRequests).toEqual("None");
+    expect(response.body.isReadyToEat).toEqual(true);
+    expect(response.body.is$20Each).toEqual(true);
+    expect(response.body.quantity).toEqual(1);
     expect(response.statusCode).toBe(200);
     expect(response.body.fruit).toEqual(fruit._id.toString());
     expect(response.body.vegetable).toEqual(vegetable._id.toString());
     expect(response.body.protein).toEqual(protein._id.toString());
     expect(response.body.dessert).toEqual(dessert._id.toString());
     expect(response.body.beverage).toEqual(beverage._id.toString());
-    expect(response.body.specialRequests).toEqual("None");
-    expect(response.body.quantity).toEqual(1);
-    expect(response.body.isReadyToEat).toEqual(true);
   });
 
   test("It should Update an individual meal", async () => {
@@ -305,9 +304,6 @@ describe("Testing Meal Endpoints For RESTFUL JSON API", () => {
 
     const fruit = new Fruit({
       name: "Cantaloupe",
-      texture: "Soft",
-      color: "Orange",
-      size: "Medium",
       quantity: 10,
       isOrganic: true,
       isRipe: true,
@@ -344,9 +340,9 @@ describe("Testing Meal Endpoints For RESTFUL JSON API", () => {
 
     const beverage = new Beverage({
       name: "Sprite",
-      size: "16oz Bottle",
       quantity: 1,
       isCold: true,
+      isLargeCup: true,
       user: user._id,
     });
     await beverage.save();
@@ -354,6 +350,7 @@ describe("Testing Meal Endpoints For RESTFUL JSON API", () => {
     const meal = new Meal({
       specialRequests: "None",
       isReadyToEat: false,
+      is$20Each: false,
       quantity: 1,
       fruit: fruit._id,
       vegetable: vegetable._id,
@@ -368,15 +365,16 @@ describe("Testing Meal Endpoints For RESTFUL JSON API", () => {
       .put(`/meals/${meal._id}`)
       .send({
         specialRequests: "Add Extra Napkins",
-        quantity: 3,
         isReadyToEat: true,
+        is$20Each: true,
+        quantity: 3,
       })
       .set("Authorization", `Bearer ${token}`); //Before the database has finished resolving, it has to finish saving the document
-    console.log(response.body);
     expect(response.statusCode).toBe(200);
     expect(response.body.specialRequests).toEqual("Add Extra Napkins");
-    expect(response.body.quantity).toEqual(3);
     expect(response.body.isReadyToEat).toEqual(true);
+    expect(response.body.is$20Each).toEqual(true);
+    expect(response.body.quantity).toEqual(3);
   });
 
   test("It should Show an individual meal", async () => {
@@ -391,9 +389,6 @@ describe("Testing Meal Endpoints For RESTFUL JSON API", () => {
 
     const fruit = new Fruit({
       name: "Cantaloupe",
-      texture: "Soft",
-      color: "Orange",
-      size: "Medium",
       quantity: 10,
       isOrganic: true,
       isRipe: true,
@@ -429,10 +424,10 @@ describe("Testing Meal Endpoints For RESTFUL JSON API", () => {
     await dessert.save();
 
     const beverage = new Beverage({
-      name: "Sprite",
-      size: "16oz Bottle",
+      name: "Coca Cola",
       quantity: 1,
       isCold: true,
+      isLargeCup: true,
       user: user._id,
     });
     await beverage.save();
@@ -440,7 +435,8 @@ describe("Testing Meal Endpoints For RESTFUL JSON API", () => {
     const meal = new Meal({
       specialRequests: "None",
       isReadyToEat: true,
-      quantity: 1,
+      is$20Each: true,
+      quantity: 3,
       fruit: fruit._id,
       vegetable: vegetable._id,
       protein: protein._id,
@@ -455,8 +451,9 @@ describe("Testing Meal Endpoints For RESTFUL JSON API", () => {
       .set("Authorization", `Bearer ${token}`);
 
     expect(response.body.specialRequests).toEqual("None");
-    expect(response.body.quantity).toEqual(1);
     expect(response.body.isReadyToEat).toEqual(true);
+    expect(response.body.is$20Each).toEqual(true);
+    expect(response.body.quantity).toEqual(3);
   });
 
   test("It should Delete an individual meal", async () => {
@@ -471,9 +468,6 @@ describe("Testing Meal Endpoints For RESTFUL JSON API", () => {
 
     const fruit = new Fruit({
       name: "Cantaloupe",
-      texture: "Soft",
-      color: "Orange",
-      size: "Medium",
       quantity: 10,
       isOrganic: true,
       isRipe: true,
@@ -509,10 +503,10 @@ describe("Testing Meal Endpoints For RESTFUL JSON API", () => {
     await dessert.save();
 
     const beverage = new Beverage({
-      name: "Sprite",
-      size: "16oz Bottle",
+      name: "Coconut Milk",
       quantity: 1,
       isCold: true,
+      isLargeCup: true,
       user: user._id,
     });
     await beverage.save();
@@ -520,6 +514,7 @@ describe("Testing Meal Endpoints For RESTFUL JSON API", () => {
     const meal = new Meal({
       specialRequests: "None",
       isReadyToEat: false,
+      is$20Each: true,
       quantity: 1,
       fruit: fruit._id,
       vegetable: vegetable._id,

@@ -61,7 +61,7 @@ describe("Testing Dessert Endpoints For RESTFUL JSON API", () => {
     }
   });
 
-  test("It should Index a list of not delicious desserts", async () => {
+  test("It should Index a list of nasty desserts", async () => {
     const user = new User({
       name: "Chris",
       email: "clflem6877@yahoo.com",

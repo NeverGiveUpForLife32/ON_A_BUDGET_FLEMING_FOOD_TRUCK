@@ -3,17 +3,22 @@ const router = express.Router();
 const dessertCtrl = require("../controllers/desserts");
 const userController = require("../controllers/users");
 
-// Index /todos/notDelicious
+// list of all nasty desserts
 router.get("/notdelicious", userController.auth, dessertCtrl.indexNotDelicious);
-// Index /todos/delicious
+
+// List of all delicious desserts
 router.get("/delicious", userController.auth, dessertCtrl.indexDelicious);
-// Create /todos/:id
+
+// Creates a dessert
 router.post("/", userController.auth, dessertCtrl.createDessert);
-// Update /todos/:id
+
+// Updates a dessert
 router.put("/:id", userController.auth, dessertCtrl.updateDessert);
-// Show /todos/:id
+
+// Displays a dessert
 router.get("/:id", userController.auth, dessertCtrl.showDessert);
-// Delete /todos/:id
+
+// Deletes a dessert
 router.delete("/:id", userController.auth, dessertCtrl.deleteDessert);
 
 module.exports = router;

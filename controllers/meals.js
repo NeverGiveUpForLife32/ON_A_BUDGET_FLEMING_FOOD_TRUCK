@@ -1,10 +1,5 @@
 const Meal = require("../models/meal");
 const User = require("../models/user");
-const Fruit = require("../models/fruit");
-const Vegetable = require("../models/vegetable");
-const Protein = require("../models/protein");
-const Desert = require("../models/dessert");
-const Beverage = require("../models/beverage");
 
 exports.indexNotReadyToEat = async function (req, res) {
   try {

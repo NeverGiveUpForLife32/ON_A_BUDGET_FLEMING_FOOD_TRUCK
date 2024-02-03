@@ -3,9 +3,6 @@ const { model, Schema } = require("mongoose");
 const fruitSchema = new Schema(
   {
     name: { type: String, required: true },
-    texture: { type: String, required: true },
-    color: { type: String, required: true },
-    size: { type: String, required: true },
     quantity: { type: Number, required: true },
     isOrganic: { type: Boolean, required: true },
     isRipe: { type: Boolean, required: true },

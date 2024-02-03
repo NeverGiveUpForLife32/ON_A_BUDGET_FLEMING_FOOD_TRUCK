@@ -3,17 +3,22 @@ const router = express.Router();
 const vegetableCtrl = require("../controllers/vegetables");
 const userController = require("../controllers/users");
 
-// Index /todos/notOrganic
+// List of all non organic vegetables
 router.get("/notorganic", userController.auth, vegetableCtrl.indexNotOrganic);
-// Index /todos/organic
+
+// List of all organic vegetables
 router.get("/organic", userController.auth, vegetableCtrl.indexOrganic);
-// Create /todos/:id
+
+// Creates a vegetable
 router.post("/", userController.auth, vegetableCtrl.createVegetable);
-// Update /todos/:id
+
+// Updates a vegetable
 router.put("/:id", userController.auth, vegetableCtrl.updateVegetable);
-// Show /todos/:id
+
+// Displays a vegetable
 router.get("/:id", userController.auth, vegetableCtrl.showVegetable);
-// Delete /todos/:id
+
+// Deletes a vegetable
 router.delete("/:id", userController.auth, vegetableCtrl.deleteVegetable);
 
 module.exports = router;

@@ -3,17 +3,22 @@ const router = express.Router();
 const beverageCtrl = require("../controllers/beverages");
 const userController = require("../controllers/users");
 
-// Index /todos/notCold
+// List of all warm beverages
 router.get("/notcold", userController.auth, beverageCtrl.indexNotCold);
-// Index /todos/cold
+
+// List of all cold beverages
 router.get("/cold", userController.auth, beverageCtrl.indexCold);
-// Create /todos/:id
+
+// Create a beverage
 router.post("/", userController.auth, beverageCtrl.createBeverage);
-// Update /todos/:id
+
+// Update a beverage
 router.put("/:id", userController.auth, beverageCtrl.updateBeverage);
-// Show /todos/:id
+
+// Display a beverage
 router.get("/:id", userController.auth, beverageCtrl.showBeverage);
-// Delete /todos/:id
+
+// Delete a beverage
 router.delete("/:id", userController.auth, beverageCtrl.deleteBeverage);
 
 module.exports = router;

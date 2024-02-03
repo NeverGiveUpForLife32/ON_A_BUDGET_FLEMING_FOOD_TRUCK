@@ -37,9 +37,9 @@ describe("Testing Beverage Endpoints For RESTFUL JSON API", () => {
 
     const beverage = new Beverage({
       name: "test beverage name",
-      size: "test beverage texture",
       quantity: 1,
       isCold: true,
+      isLargeCup: true,
       user: user._id,
     });
     await beverage.save(); //Before the database has finished resolving, it has to finish saving the document
@@ -55,13 +55,13 @@ describe("Testing Beverage Endpoints For RESTFUL JSON API", () => {
 
     for (let i = 0; i < response.body.length; i++) {
       expect(response.body[i]).toHaveProperty("name");
-      expect(response.body[i]).toHaveProperty("size");
       expect(response.body[i]).toHaveProperty("quantity");
       expect(response.body[i]).toHaveProperty("isCold");
+      expect(response.body[i]).toHaveProperty("isLargeCup");
     }
   });
 
-  test("It should Index a list of not cold beverages", async () => {
+  test("It should Index a list of warm beverages", async () => {
     const user = new User({
       name: "Chris",
       email: "clflem68770@yahoo.com",
@@ -71,9 +71,9 @@ describe("Testing Beverage Endpoints For RESTFUL JSON API", () => {
 
     const beverage = new Beverage({
       name: "test beverage name",
-      size: "test beverage texture",
       quantity: 1,
       isCold: true,
+      isLargeCup: true,
       user: user._id,
     });
     await beverage.save(); //Before the database has finished resolving, it has to finish saving the document
@@ -89,9 +89,9 @@ describe("Testing Beverage Endpoints For RESTFUL JSON API", () => {
 
     for (let i = 0; i < response.body.length; i++) {
       expect(response.body[i]).toHaveProperty("name");
-      expect(response.body[i]).toHaveProperty("size");
       expect(response.body[i]).toHaveProperty("quantity");
       expect(response.body[i]).toHaveProperty("isCold");
+      expect(response.body[i]).toHaveProperty("isLargeCup");
     }
   });
 
@@ -109,17 +109,17 @@ describe("Testing Beverage Endpoints For RESTFUL JSON API", () => {
       .post("/beverages")
       .send({
         name: "Apple Juice",
-        size: "Large",
         quantity: 1,
         isCold: true,
+        isLargeCup: true,
       })
       .set("Authorization", `Bearer ${token}`); //make a request using supertest. Before this finishes resolving, it needs to make a request to /fruits.
 
     expect(response.statusCode).toBe(200);
     expect(response.body.name).toEqual("Apple Juice");
-    expect(response.body.size).toEqual("Large");
     expect(response.body.quantity).toEqual(1);
     expect(response.body.isCold).toEqual(true);
+    expect(response.body.isLargeCup).toEqual(true);
   });
 
   test("It should Update an individual beverage", async () => {
@@ -134,9 +134,9 @@ describe("Testing Beverage Endpoints For RESTFUL JSON API", () => {
 
     const beverage = new Beverage({
       name: "Orange Juice",
-      size: "Medium",
       quantity: 1,
       isCold: true,
+      isLargeCup: true,
       user: user._id,
     });
     await beverage.save();
@@ -145,17 +145,17 @@ describe("Testing Beverage Endpoints For RESTFUL JSON API", () => {
       .put(`/beverages/${beverage._id}`)
       .send({
         name: "Banana Juice",
-        size: "Medium",
         quantity: 3,
         isCold: true,
+        isLargeCup: true,
       })
       .set("Authorization", `Bearer ${token}`); //Before the database has finished resolving, it has to finish saving the document
 
     expect(response.statusCode).toBe(200);
     expect(response.body.name).toEqual("Banana Juice");
-    expect(response.body.size).toEqual("Medium");
     expect(response.body.quantity).toEqual(3);
     expect(response.body.isCold).toEqual(true);
+    expect(response.body.isLargeCup).toEqual(true);
   });
 
   test("It should Show an individual beverage", async () => {
@@ -170,9 +170,9 @@ describe("Testing Beverage Endpoints For RESTFUL JSON API", () => {
 
     const beverage = new Beverage({
       name: "Grape Juice",
-      size: "Large",
       quantity: 1,
       isCold: true,
+      isLargeCup: true,
       user: user._id,
     });
     await beverage.save();
@@ -183,9 +183,9 @@ describe("Testing Beverage Endpoints For RESTFUL JSON API", () => {
 
     expect(response.statusCode).toBe(200);
     expect(response.body.name).toEqual("Grape Juice");
-    expect(response.body.size).toEqual("Large");
     expect(response.body.quantity).toEqual(1);
     expect(response.body.isCold).toEqual(true);
+    expect(response.body.isLargeCup).toEqual(true);
   });
 
   test("It should Delete an individual beverage", async () => {
@@ -200,9 +200,9 @@ describe("Testing Beverage Endpoints For RESTFUL JSON API", () => {
 
     const beverage = new Beverage({
       name: "Coconut Milk",
-      size: "Small",
       quantity: 1,
       isCold: true,
+      isLargeCup: true,
       user: user._id,
     });
     await beverage.save();

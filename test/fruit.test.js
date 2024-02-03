@@ -37,9 +37,6 @@ describe("Testing Fruit Endpoints For RESTFUL JSON API", () => {
 
     const fruit = new Fruit({
       name: "test fruit name",
-      texture: "test fruit texture",
-      color: "test fruit color",
-      size: "test fruit texture",
       quantity: 1,
       isOrganic: true,
       isRipe: true,
@@ -58,9 +55,6 @@ describe("Testing Fruit Endpoints For RESTFUL JSON API", () => {
 
     for (let i = 0; i < response.body.length; i++) {
       expect(response.body[i]).toHaveProperty("name");
-      expect(response.body[i]).toHaveProperty("texture");
-      expect(response.body[i]).toHaveProperty("color");
-      expect(response.body[i]).toHaveProperty("size");
       expect(response.body[i]).toHaveProperty("quantity");
       expect(response.body[i]).toHaveProperty("isOrganic");
       expect(response.body[i]).toHaveProperty("isRipe");
@@ -77,9 +71,6 @@ describe("Testing Fruit Endpoints For RESTFUL JSON API", () => {
 
     const fruit = new Fruit({
       name: "test fruit name",
-      texture: "test fruit texture",
-      color: "test fruit color",
-      size: "test fruit texture",
       quantity: 1,
       isOrganic: true,
       isRipe: false,
@@ -98,9 +89,6 @@ describe("Testing Fruit Endpoints For RESTFUL JSON API", () => {
 
     for (let i = 0; i < response.body.length; i++) {
       expect(response.body[i]).toHaveProperty("name");
-      expect(response.body[i]).toHaveProperty("texture");
-      expect(response.body[i]).toHaveProperty("color");
-      expect(response.body[i]).toHaveProperty("size");
       expect(response.body[i]).toHaveProperty("quantity");
       expect(response.body[i]).toHaveProperty("isOrganic");
       expect(response.body[i]).toHaveProperty("isRipe");
@@ -132,9 +120,6 @@ describe("Testing Fruit Endpoints For RESTFUL JSON API", () => {
 
     expect(response.statusCode).toBe(200);
     expect(response.body.name).toEqual("Apple");
-    expect(response.body.texture).toEqual("Hard");
-    expect(response.body.color).toEqual("Red");
-    expect(response.body.size).toEqual("Large");
     expect(response.body.quantity).toEqual(1);
     expect(response.body.isOrganic).toEqual(true);
     expect(response.body.isRipe).toEqual(true);
@@ -152,9 +137,6 @@ describe("Testing Fruit Endpoints For RESTFUL JSON API", () => {
 
     const fruit = new Fruit({
       name: "Apple",
-      texture: "Hard",
-      color: "Green",
-      size: "Large",
       quantity: 1,
       isOrganic: true,
       isRipe: true,
@@ -166,9 +148,6 @@ describe("Testing Fruit Endpoints For RESTFUL JSON API", () => {
       .put(`/fruits/${fruit._id}`)
       .send({
         name: "Banana",
-        texture: "Soft",
-        color: "Yellow",
-        size: "Medium",
         quantity: 3,
         isOrganic: true,
         isRipe: true,
@@ -177,9 +156,6 @@ describe("Testing Fruit Endpoints For RESTFUL JSON API", () => {
 
     expect(response.statusCode).toBe(200);
     expect(response.body.name).toEqual("Banana");
-    expect(response.body.texture).toEqual("Soft");
-    expect(response.body.color).toEqual("Yellow");
-    expect(response.body.size).toEqual("Medium");
     expect(response.body.quantity).toEqual(3);
     expect(response.body.isOrganic).toEqual(true);
     expect(response.body.isRipe).toEqual(true);
@@ -197,9 +173,6 @@ describe("Testing Fruit Endpoints For RESTFUL JSON API", () => {
 
     const fruit = new Fruit({
       name: "Pear",
-      texture: "Hard",
-      color: "Green",
-      size: "Large",
       quantity: 4,
       isOrganic: true,
       isRipe: true,
@@ -213,9 +186,6 @@ describe("Testing Fruit Endpoints For RESTFUL JSON API", () => {
 
     expect(response.statusCode).toBe(200);
     expect(response.body.name).toEqual("Pear");
-    expect(response.body.texture).toEqual("Hard");
-    expect(response.body.color).toEqual("Green");
-    expect(response.body.size).toEqual("Large");
     expect(response.body.quantity).toEqual(4);
     expect(response.body.isOrganic).toEqual(true);
     expect(response.body.isRipe).toEqual(true);
@@ -233,9 +203,6 @@ describe("Testing Fruit Endpoints For RESTFUL JSON API", () => {
 
     const fruit = new Fruit({
       name: "Cantaloupe",
-      texture: "Soft",
-      color: "Orange",
-      size: "Medium",
       quantity: 1,
       isOrganic: true,
       isRipe: true,

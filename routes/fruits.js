@@ -3,17 +3,22 @@ const router = express.Router();
 const fruitCtrl = require("../controllers/fruits");
 const userController = require("../controllers/users");
 
-// Index /todos/notRipe
+// Lists all unriped fruits
 router.get("/notripe", userController.auth, fruitCtrl.indexNotRipe);
-// Index /todos/ripe
+
+// Lists all riped fruits
 router.get("/ripe", userController.auth, fruitCtrl.indexRipe);
-// Create /todos/:id
+
+// Creates a fruit
 router.post("/", userController.auth, fruitCtrl.createFruit);
-// Update /todos/:id
+
+// Updates a fruit
 router.put("/:id", userController.auth, fruitCtrl.updateFruit);
-// Show /todos/:id
+
+// Displays a fruit
 router.get("/:id", userController.auth, fruitCtrl.showFruit);
-// Delete /todos/:id
+
+// Deletes a fruit
 router.delete("/:id", userController.auth, fruitCtrl.deleteFruit);
 
 module.exports = router;
